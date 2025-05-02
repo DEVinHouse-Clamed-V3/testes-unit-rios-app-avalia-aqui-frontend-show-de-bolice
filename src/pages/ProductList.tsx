@@ -12,56 +12,50 @@ import {
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-// Define o tipo Product com base nos dados da API
 type Product = {
   id: number;
   name: string;
   brand: string;
-  price: string; // O preço é uma string conforme seu db.json
+  price: string;
   description: string;
-  image: string; // URL da imagem do produto
+  image: string;
 };
 
-// Define os parâmetros de navegação para o Stack Navigator
 type RootStackParamList = {
   Home: undefined;
   ProductList: undefined;
   FeedbackForm: { productId: number };
 };
 
-// Define o tipo de navegação para a tela ProductList
 type ProductListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "ProductList"
 >;
 
-// Define as props do componente ProductList
 type Props = {
   navigation: ProductListScreenNavigationProp;
 };
 
 const ProductList: React.FC<Props> = ({ navigation }) => {
-  const [products, setProducts] = useState<Product[]>([]); // Estado para armazenar produtos
-  const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // Função para buscar produtos da API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://192.168.3.5:3000/products"); // Atualize com o IP correto da sua máquina
-        setProducts(response.data); // Certifique-se de definir os produtos corretamente
-        setLoading(false); // Desabilita o estado de carregamento
+        const response = await axios.get("http://192.168.3.5:3000/products");
+        setProducts(response.data);
+        setLoading(false);
       } catch (error) {
         Alert.alert("Erro", "Não foi possível carregar os produtos.");
-        console.error("Error fetching products:", error); // Log do erro no console
-        setLoading(false); // Mesmo com erro, remover o carregamento
+        console.error("Error fetching products:", error);
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  // Função para renderizar cada produto no FlatList
   const renderProduct = ({ item }: { item: Product }) => {
     console.log(item.image); // Verificar se a URL da imagem está correta
     return (
